@@ -102,6 +102,20 @@
       backdrop-filter: blur(6px);
     }
     .release b { color: #fff; font-weight: 600; }
+    .hero-row { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 22px; }
+    .hero-row .release { margin-top: 0; }
+    .jump {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 999px; border: 1px solid transparent;
+      background: var(--accent); color: var(--on-accent);
+      font-size: 14px; font-weight: 600; text-decoration: none;
+    }
+    .jump:hover { background: var(--accent-hot); }
+    .jump.ghost { background: rgba(5, 22, 38, 0.38); border-color: rgba(255, 255, 255, 0.25); color: #fff; backdrop-filter: blur(6px); }
+    .jump.ghost:hover { background: rgba(5, 22, 38, 0.55); }
+    .jump:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+    .jump svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+    #download { scroll-margin-top: 24px; }
     .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--good); flex: none; }
 
     main { margin-top: -34px; position: relative; z-index: 1; }
@@ -156,7 +170,8 @@
     .needs li b { color: var(--text); font-weight: 600; }
     .needs svg { width: 20px; height: 20px; flex: none; margin-top: 1px; fill: var(--good); }
 
-    .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 18px 0 0; }
+    .notes { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; margin: 40px 0 0; }
+    .notes + .cards { margin-top: 40px; }
     .note {
       background: var(--bg-alt);
       border: 1px solid var(--border);
@@ -171,7 +186,7 @@
     .note.warn { border-left-color: var(--warn); }
     .ai-warning {
       display: flex; gap: 14px; align-items: flex-start;
-      margin: 0 0 18px; padding: 16px 20px;
+      margin: 40px 0 18px; padding: 16px 20px;
       background: #2a2214; border: 1px solid #8a6a2e; border-radius: 16px;
       color: #e8dcc4; font-size: 15px;
     }
@@ -253,51 +268,16 @@
       </div>
       <h1>Cemu's Clarity, back in Hyrule.</h1>
       <p class="lede">An add-on for <b>Savage Wind Recomp</b> that brings over Cemu's Clarity look with <b>all 20 presets</b>: less haze, less blown-out bloom, richer colour. Not a single Savage Wind file is changed.</p>
-      <div class="release" id="release"><span class="dot"></span><span>Newest version: <b id="release-name">see the release page</b></span><span id="release-date"></span></div>
+      <div class="hero-row">
+        <a class="jump" href="#download"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 20h14v-2H5v2zM19 9h-4V3H9v6H5l7 7 7-7z"/></svg>Download</a>
+        <a class="jump ghost" href="https://github.com/devall96/ClearSkies"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.1c-3.3.7-4-1.4-4-1.4-.6-1.4-1.3-1.8-1.3-1.8-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1.1 1.8 2.8 1.3 3.5 1 .1-.8.4-1.3.8-1.6-2.7-.3-5.5-1.3-5.5-5.9 0-1.3.5-2.4 1.2-3.2-.1-.3-.5-1.5.1-3.2 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0c2.3-1.5 3.3-1.2 3.3-1.2.6 1.7.2 2.9.1 3.2.8.8 1.2 1.9 1.2 3.2 0 4.6-2.8 5.6-5.5 5.9.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z"/></svg>GitHub</a>
+        <div class="release" id="release"><span class="dot"></span><span>Newest version: <b id="release-name">see the release page</b></span><span id="release-date"></span></div>
+      </div>
     </div>
   </div>
 
   <div class="wrap">
     <main>
-      <aside class="ai-warning" role="note" aria-label="Made with AI">
-        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
-        <p><b>Made with AI.</b> Every line of Clear Skies' code, its tests, the icon and this page were written by Claude, Anthropic's AI, through Claude Code. A human, devall96, directs it and plays every build, but <b>no human reviews the code line by line.</b> If you don't want to run code made that way, don't download it. As with anything from the internet, you run it at your own risk.</p>
-      </aside>
-
-      <section class="cards" aria-label="Download">
-        <article class="card main">
-          <div class="os">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.1 10.4 4v7.2H3zM11.3 3.9 21 2.5v8.7h-9.7zM3 12.1h7.4v7.2L3 18.2zM11.3 12.1H21v8.6l-9.7-1.3z"/></svg>
-            <div><h2>Windows</h2><span class="sub">Windows 10 or 11, 64-bit, with a Vulkan graphics card</span></div>
-          </div>
-          <!-- The zip's name carries the version, so the script below points this at the newest one.
-               Without the script, it opens the newest release on GitHub. -->
-          <a class="btn primary" id="zip-link" href="https://github.com/devall96/ClearSkies/releases/latest">
-            <span class="file">Download Clear Skies<small id="zip-name">ClearSkies-&lt;version&gt;.zip</small></span>
-            <span class="size" id="zip-size"></span>
-          </a>
-          <ol class="steps">
-            <li>Unzip the <b>ClearSkies</b> folder anywhere. Its files must stay together.</li>
-            <li>Run <b>ClearSkies.exe</b>. If Windows says <b>"Windows protected your PC"</b> (Clear Skies isn't code-signed), click <b>More info → Run anyway</b>.</li>
-            <li>Choose a look, click <b>Browse</b> to find your <code>savagewind.exe</code>, and press <b>Play</b>.</li>
-            <li>For a new version, download it here again and unzip it over the old folder.</li>
-          </ol>
-        </article>
-
-        <article class="card">
-          <span class="label">Before you start</span>
-          <ul class="needs">
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>A working Savage Wind.</b> Set up with your own game files and started at least once. <a href="https://github.com/Revivedx/SavageWindRecomp">Savage Wind Recomp</a> isn't included.</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Precompiled shaders</b>, for the smoothest first run: <b>Precompile shaders</b> in Savage Wind Configuration.</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Nothing to uninstall.</b> Delete the folder and it's gone. Start <code>savagewind.exe</code> directly any time for the original look.</span></li>
-          </ul>
-        </article>
-      </section>
-
-      <div class="notes">
-        <p class="note caution"><b>No game files, ever.</b> Not in the download, the issues or the wiki. Please don't post game files, dumps, keys or an installed copy.</p>
-        <p class="note warn"><b>Early, tested on one PC</b> (AMD RX 9070 XT, HDR off). NVIDIA, Intel, HDR, Linux and Steam Deck reports are very welcome: <a href="https://github.com/devall96/ClearSkies/issues">open an issue</a>.</p>      </div>
-
       <h3 class="section">What Clarity looks like</h3>
       <p class="section-sub">Serfrost's preset, Clarity's recommended look. Nineteen more ship with it, from Filmic to Survival of the Wild, and all 65 of Clarity's settings can be tuned on top.</p>
       <div class="gallery">
@@ -342,6 +322,46 @@
         </ul>
         <p class="later"><b>Later:</b> Nexus Mods, and other recomps besides Savage Wind.</p>
       </section>
+
+      <div class="notes">
+        <p class="note caution"><b>No game files, ever.</b> Not in the download, the issues or the wiki. Please don't post game files, dumps, keys or an installed copy.</p>
+        <p class="note warn"><b>Early, tested on one PC</b> (AMD RX 9070 XT, HDR off). NVIDIA, Intel, HDR, Linux and Steam Deck reports are very welcome: <a href="https://github.com/devall96/ClearSkies/issues">open an issue</a>.</p>      </div>
+
+      <h3 class="section" id="download">Download Clear Skies</h3>
+      <section class="cards" aria-label="Download">
+        <article class="card main">
+          <div class="os">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.1 10.4 4v7.2H3zM11.3 3.9 21 2.5v8.7h-9.7zM3 12.1h7.4v7.2L3 18.2zM11.3 12.1H21v8.6l-9.7-1.3z"/></svg>
+            <div><h2>Windows</h2><span class="sub">Windows 10 or 11, 64-bit, with a Vulkan graphics card</span></div>
+          </div>
+          <!-- The zip's name carries the version, so the script below points this at the newest one.
+               Without the script, it opens the newest release on GitHub. -->
+          <a class="btn primary" id="zip-link" href="https://github.com/devall96/ClearSkies/releases/latest">
+            <span class="file">Download Clear Skies<small id="zip-name">ClearSkies-&lt;version&gt;.zip</small></span>
+            <span class="size" id="zip-size"></span>
+          </a>
+          <ol class="steps">
+            <li>Unzip the <b>ClearSkies</b> folder anywhere. Its files must stay together.</li>
+            <li>Run <b>ClearSkies.exe</b>. If Windows says <b>"Windows protected your PC"</b> (Clear Skies isn't code-signed), click <b>More info → Run anyway</b>.</li>
+            <li>Choose a look, click <b>Browse</b> to find your <code>savagewind.exe</code>, and press <b>Play</b>.</li>
+            <li>For a new version, download it here again and unzip it over the old folder.</li>
+          </ol>
+        </article>
+
+        <article class="card">
+          <span class="label">Before you start</span>
+          <ul class="needs">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>A working Savage Wind.</b> Set up with your own game files and started at least once. <a href="https://github.com/Revivedx/SavageWindRecomp">Savage Wind Recomp</a> isn't included.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Precompiled shaders</b>, for the smoothest first run: <b>Precompile shaders</b> in Savage Wind Configuration.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Nothing to uninstall.</b> Delete the folder and it's gone. Start <code>savagewind.exe</code> directly any time for the original look.</span></li>
+          </ul>
+        </article>
+      </section>
+
+      <aside class="ai-warning" role="note" aria-label="Made with AI">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1 21h22L12 2 1 21zm12-3h-2v-2h2v2zm0-4h-2v-4h2v4z"/></svg>
+        <p><b>Made with AI.</b> Every line of Clear Skies' code, its tests, the icon and this page were written by Claude, Anthropic's AI, through Claude Code. A human, devall96, directs it and plays every build, but <b>no human reviews the code line by line.</b> If you don't want to run code made that way, don't download it. As with anything from the internet, you run it at your own risk.</p>
+      </aside>
     </main>
 
     <footer>
