@@ -2,7 +2,7 @@
 
 **Clear Skies** is a mod for [Savage Wind Recomp](https://github.com/Revivedx/SavageWindRecomp), the native PC version of *The Legend of Zelda: Breath of the Wild*. It brings over **Clarity**, the much-loved look from Cemu's Breath of the Wild graphic pack, with **all 20 of its presets**. You get less haze, less blown-out bloom and richer colour, without changing a single file of Savage Wind.
 
-**[Download the newest release](https://github.com/devall96/ClearSkies/releases)** · [Install it](#how-to-install) · [The presets](#the-presets) · [Help test it](#help-test-it)
+**[⬇ Download Clear Skies](https://devall96.github.io/ClearSkies/)** · [All releases](https://github.com/devall96/ClearSkies/releases) · [Install it](#how-to-install) · [The presets](#the-presets) · [Help test it](#help-test-it)
 
 > [!CAUTION]
 > **No game files are included, and none ever will be**: not in the code, the releases, the issues or the wiki. Clear Skies doesn't include Savage Wind either. You need your own working copy of Savage Wind, set up with your own game files, dumped from your own Switch. Please don't post game files, dumps, keys or an installed copy here.
