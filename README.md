@@ -73,36 +73,34 @@ From then on, start the game with ClearSkies.exe whenever you want Clarity. To c
 
 ### On Linux and Steam Deck
 
-Savage Wind runs natively on Linux as an AppImage, and Clear Skies has a native Linux build for it: `libclearskies_layer.so` and a launcher script, `clearskies.sh`, in place of the Windows `.dll` and `.exe`. It works the same way: the layer is switched on only for the game the script starts, and nothing is installed system-wide.
+Savage Wind runs natively on Linux as an AppImage, and so does Clear Skies: **one file**, `ClearSkies-<version>-x86_64.AppImage`, with the same window as on Windows. It works the same way too: the layer is switched on only for the game it starts, and nothing is installed system-wide.
 
 1. Have a working **Savage Wind AppImage** first (`Savage_Wind-…-x86_64.AppImage`), set up with your game files and started at least once.
-2. **[Download the newest Clear Skies](https://github.com/devall96/ClearSkies/releases)** for Linux (`ClearSkies-<version>-linux-x86_64.tar.gz`) and unpack it anywhere with `tar xzf ClearSkies-*-linux-x86_64.tar.gz`. Keep the `ClearSkies-linux` folder's files together. (Or [build it yourself](#build-it-yourself).)
-3. Point it at the game once, choose a look, and play:
+2. **[Download the newest Clear Skies](https://github.com/devall96/ClearSkies/releases)** for Linux (`ClearSkies-<version>-x86_64.AppImage`) and put it anywhere.
+3. Allow it to run: right-click it, open **Properties**, and tick **Allow executing file as program** (or run `chmod +x ClearSkies-*-x86_64.AppImage`). Then open it.
+4. Choose a look, click **Browse** to find your Savage Wind AppImage (or drag it onto the window), and press **Play**. If the Savage Wind AppImage isn't allowed to run yet, Clear Skies offers to allow it.
 
-```bash
-./clearskies.sh --game ~/Games/Savage_Wind-0.5.1-alpha.5-x86_64.AppImage --preset serfrost
-```
+From then on, open Clear Skies whenever you want Clarity. Your choices are saved in `~/.config/ClearSkies/clearskies.ini` (an AppImage can't change itself), and the layer's log, `clearskies.log`, is written next to it. **Edit settings** opens that file.
 
-After that, `./clearskies.sh` starts the game with the saved settings.
+**Command line**
 
 | | |
 | --- | --- |
-| `./clearskies.sh` | Start with the saved preset and game |
-| `./clearskies.sh --preset filmic` | Choose a preset (it's saved) and start |
-| `./clearskies.sh --list` | List the presets |
-| `./clearskies.sh --edit` | Open `clearskies.ini` in your editor |
-| `./clearskies.sh --preset filmic --no-play` | Only save the choice |
-| `./clearskies.sh -- --config` | Anything after `--` goes to Savage Wind |
+| `./ClearSkies-*.AppImage --play` | Start straight away with the saved preset and game |
+| `./ClearSkies-*.AppImage --preset filmic --play` | Choose a preset (it's saved) and start |
+| `./ClearSkies-*.AppImage --game ~/Games/Savage_Wind-…-x86_64.AppImage --no-play` | Only save the choice |
+| `./ClearSkies-*.AppImage --list` | List the presets |
+| `./ClearSkies-*.AppImage --play -- --config` | Anything after `--` goes to Savage Wind |
 
-**Steam and Steam Deck:** add the AppImage to Steam as a non-Steam game (native, without Proton), then set its launch options to:
+**Steam and Steam Deck:** add the **Savage Wind** AppImage to Steam as a non-Steam game (native, without Proton), then set its launch options to:
 
 ```
-/home/deck/ClearSkies-linux/clearskies.sh %command%
+/home/deck/Applications/ClearSkies-0.2.1-x86_64.AppImage %command%
 ```
 
-Use the path where you keep the folder. The game then starts with your saved preset. To change it, run `./clearskies.sh --preset <name> --no-play` from a terminal (in Desktop Mode on the Deck).
+Use the path where you keep Clear Skies. The game then starts with your saved preset. To change it, open Clear Skies in Desktop Mode, pick another look and close the window (or run it with `--preset <name> --no-play`).
 
-The layer uses the shaderc library that the Savage Wind AppImage ships, so nothing else needs to be installed. If that copy can't be found, it falls back to the system's shaderc (`libshaderc1` on Debian and Ubuntu, `libshaderc` on Fedora, `shaderc` on Arch), and `clearskies.log` says which copy it used. The log is written next to `clearskies.ini`, and the Troubleshooting table below applies on Linux too. On Linux, "keep all of Clear Skies' files together" means `libclearskies_layer.so`, `VkLayer_clearskies.json` and `clearskies.sh`.
+The layer uses the shaderc library that the Savage Wind AppImage ships, so nothing else needs to be installed. If that copy can't be found, it falls back to the system's shaderc (`libshaderc1` on Debian and Ubuntu, `libshaderc` on Fedora, `shaderc` on Arch), and `clearskies.log` says which copy it used. The Troubleshooting table below applies on Linux too.
 
 ## The presets
 
@@ -204,7 +202,14 @@ This writes the mod to `dist\ClearSkies`. To test the layer on your own GPU agai
 powershell -ExecutionPolicy Bypass -File tests\run_tests.ps1 -SavageWind "C:\Games\Savage Wind"
 ```
 
-**On Linux** you need a C compiler (gcc or clang) and, optionally, Python 3 to regenerate the presets. This writes the mod to `dist/ClearSkies-linux`:
+**The Linux AppImage** is built on Ubuntu 22.04 (glibc 2.35, like Savage Wind's), as GitHub's check does: install the packages listed in the `appimage` job of `.github/workflows/linux.yml`, then run the build. It downloads SDL 3.4.16, appimagetool and the AppImage runtime (each checked against its SHA-256) and writes `dist/ClearSkies-<version>-x86_64.AppImage`. The second command tests it the way players use it, with a fake game standing in for Savage Wind:
+
+```bash
+bash tools/appimage.sh
+sh tests/appimage_test.sh dist/ClearSkies-*-x86_64.AppImage
+```
+
+**Just the Linux layer**, without the window, needs only a C compiler (gcc or clang) and, optionally, Python 3 to regenerate the presets. This writes it to `dist/ClearSkies-linux`, with `clearskies.sh`, a launcher script for the command line:
 
 ```bash
 ./build.sh
@@ -228,8 +233,11 @@ tests/run_tests.sh squashfs-root/usr/lib
 | `src/clarity_shader.h` | Clarity's inputs and `main()` for Savage Wind |
 | `src/cemu_presets.h` | Generated: every preset and Clarity's functions, from Cemu's files |
 | `src/launcher.c` | ClearSkies.exe |
-| `src/clearskies.sh` | The Linux launcher script |
-| `build.sh`, `tests/run_tests.sh` | The Linux build and layer test |
+| `src/launcher_sdl.c` | The Linux launcher window (in the AppImage), drawn with SDL3 like ClearSkies.exe |
+| `tools/appimage.sh`, `tools/linux/` | Build the Linux AppImage |
+| `tests/appimage_test.sh` | Tests the AppImage: command line, window, every preset, and Play with a fake game |
+| `src/clearskies.sh` | A launcher script for the command line, with `build.sh` |
+| `build.sh`, `tests/run_tests.sh` | The Linux layer's build and test |
 | `tools/gen_presets.py` | Generates `cemu_presets.h` and `clearskies.ini` from `third_party/cemu` |
 | `tools/make_icon.py`, `tools/make_banner.ps1` | Draw the icon and this page's banner |
 | `tests/` | The layer test, run on a real GPU |
@@ -240,7 +248,7 @@ tests/run_tests.sh squashfs-root/usr/lib
 
 **Claude (Anthropic's AI, Claude Opus 5.5 through Claude Code):** all of the code, the tests, the preset generator, the icon and banner (drawn by scripts), the license research and this page. That includes porting Cemu's Clarity shader to Savage Wind and working out how to recognise the game's tone-mapping shader. No human has reviewed the code line by line.
 
-**[Danny Rashid](https://github.com/danny-rashd):** Linux and Steam Deck support: the Linux build of the layer, `clearskies.sh`, `build.sh` and the Linux test (also written with Claude).
+**[Danny Rashid](https://github.com/danny-rashd):** Linux and Steam Deck support: the Linux build of the layer, `clearskies.sh`, `build.sh` and the Linux test (also written with Claude). The Linux window and the AppImage came after, from Claude.
 
 **Cemu's graphic pack authors:** Clarity itself and every preset. **Savage Wind and its contributors:** everything Clear Skies builds on.
 
@@ -248,10 +256,11 @@ tests/run_tests.sh squashfs-root/usr/lib
 
 - **Clarity** from the [Cemu graphic packs](https://github.com/cemu-project/cemu_graphic_packs) (CC0 1.0): Clarity GFX by Jamie (main code) and Kiri (code and ReShade logic), with Crementif. Presets by Serfrost, Bruz, CellHunter, Jamie, t3nka, The Complaining Gamer, Visk, Silentverge, Godot, Hexaae, MaranBr, YeMaoWuXin and Cobalt. Contrasty, Filmic and the User-Defined starting values come with the pack without a named creator. Several passes are ports of ReShade effects, as they appear in the pack.
 - **[Savage Wind Recomp](https://github.com/Revivedx/SavageWindRecomp)** by Revivedx and contributors, built on **[LAS Recomp](https://github.com/peiikai/LASRecomp)** by Peiikai (MIT). Not included: Clear Skies works with your own copy.
-- The banner's lettering is [Fira Sans](https://github.com/mozilla/Fira) by the Mozilla Foundation and Telefónica (SIL Open Font License 1.1, `third_party/fonts/FiraSans`).
+- [Fira Sans](https://github.com/mozilla/Fira) by the Mozilla Foundation and Telefónica (SIL Open Font License 1.1, `third_party/fonts/FiraSans`): the banner's lettering, and the Linux window's text.
+- The Linux window uses [SDL3](https://github.com/libsdl-org/SDL) (zlib license) and [stb_truetype](https://github.com/nothings/stb) by Sean Barrett (public domain or MIT, `third_party/stb`).
 - The few Vulkan declarations the layer needs follow the Khronos [Vulkan-Headers](https://github.com/KhronosGroup/Vulkan-Headers) (Apache-2.0 or MIT). Vulkan is a registered trademark of the Khronos Group Inc.
 - *The Legend of Zelda: Breath of the Wild* is © Nintendo. *Nintendo Switch* and *The Legend of Zelda* are trademarks of Nintendo. This project is not affiliated with or endorsed by Nintendo.
 
 ## License
 
-Clear Skies' own code is under the [MIT License](LICENSE). Material from others keeps its own license: Cemu's Clarity pack is CC0 1.0 and Fira Sans is OFL 1.1. [LICENSES.txt](LICENSES.txt) has the full list, including exactly what was adapted.
+Clear Skies' own code is under the [MIT License](LICENSE). Material from others keeps its own license: Cemu's Clarity pack is CC0 1.0, Fira Sans is OFL 1.1, SDL3 is zlib and stb_truetype is public domain or MIT. [LICENSES.txt](LICENSES.txt) has the full list, including exactly what was adapted.

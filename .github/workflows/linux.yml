@@ -28,24 +28,34 @@ jobs:
     runs-on: ubuntu-24.04
     container: ubuntu:22.04
     steps:
-      - name: Install the build tools, SDL3's build packages, and Vulkan (lavapipe), shaderc and Xvfb for the tests
+      - name: Install the build tools and SDL3's build packages
         run: |
           apt-get update -q
-          DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
-            ca-certificates curl git file build-essential cmake ninja-build pkg-config python3 \
-            libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
-            libwayland-dev libxkbcommon-dev wayland-protocols libdecor-0-dev libdbus-1-dev \
-            libegl1-mesa-dev libgl1-mesa-dev libgles2-mesa-dev \
-            libvulkan1 mesa-vulkan-drivers libgl1-mesa-dri libshaderc1 xvfb xauth
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends             ca-certificates curl git file build-essential cmake ninja-build pkg-config python3             libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev             libwayland-dev libxkbcommon-dev wayland-protocols libdecor-0-dev libdbus-1-dev             libegl1-mesa-dev libgl1-mesa-dev libgles2-mesa-dev
       - uses: actions/checkout@v4
       - name: Build the AppImage
         run: bash tools/appimage.sh
-      - name: Test the AppImage
-        run: sh tests/appimage_test.sh dist/ClearSkies-*-x86_64.AppImage
       - uses: actions/upload-artifact@v4
         with:
           name: ClearSkies-AppImage
           path: dist/*.AppImage
+
+  # Tested on a newer Ubuntu than it was built on (and Ubuntu 22.04 has no shaderc package for the layer test)
+  appimage-test:
+    needs: appimage
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: ClearSkies-AppImage
+          path: dist
+      - name: Install Vulkan (lavapipe), shaderc and Xvfb
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends gcc libc6-dev libvulkan1 mesa-vulkan-drivers libshaderc1             libgl1-mesa-dri libegl1 xvfb xauth
+      - name: Test the AppImage
+        run: chmod +x dist/*.AppImage && sh tests/appimage_test.sh dist/ClearSkies-*-x86_64.AppImage
       - uses: actions/upload-artifact@v4
         if: always()
         with:
