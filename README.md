@@ -240,6 +240,8 @@ tests/run_tests.sh squashfs-root/usr/lib
 
 **Claude (Anthropic's AI, Claude Opus 5.5 through Claude Code):** all of the code, the tests, the preset generator, the icon and banner (drawn by scripts), the license research and this page. That includes porting Cemu's Clarity shader to Savage Wind and working out how to recognise the game's tone-mapping shader. No human has reviewed the code line by line.
 
+**[Danny Rashid](https://github.com/danny-rashd):** Linux and Steam Deck support: the Linux build of the layer, `clearskies.sh`, `build.sh` and the Linux test (also written with Claude).
+
 **Cemu's graphic pack authors:** Clarity itself and every preset. **Savage Wind and its contributors:** everything Clear Skies builds on.
 
 ## Credits

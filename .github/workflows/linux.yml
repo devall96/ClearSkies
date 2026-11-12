@@ -1,0 +1,26 @@
+# Clear Skies for Linux: builds the layer and runs the layer test against every preset on Mesa's software Vulkan
+# driver (lavapipe) with Ubuntu's shaderc. The built mod is kept as a download on each run.
+name: Linux
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install a compiler, Vulkan (lavapipe) and shaderc
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q --no-install-recommends gcc libc6-dev python3 libvulkan1 mesa-vulkan-drivers libshaderc1
+      - name: Build
+        run: sh ./build.sh
+      - name: Test every preset
+        run: sh tests/run_tests.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: ClearSkies-linux-x86_64
+          path: dist/ClearSkies-linux/
