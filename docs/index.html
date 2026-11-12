@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Download Clear Skies</title>
-  <meta name="description" content="Clear Skies brings Cemu's Clarity look, with all 20 presets, to Savage Wind Recomp. A full mod manager is on the way. For Windows.">
+  <meta name="description" content="Clear Skies brings Cemu's Clarity look, with all 20 presets, to Savage Wind Recomp. For Windows, Linux and Steam Deck.">
   <link rel="icon" href="icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -122,7 +122,7 @@
 
     .cards {
       display: grid;
-      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
       gap: 18px;
     }
     .card {
@@ -132,6 +132,7 @@
       border-radius: 20px;
       padding: 26px 24px 24px;
     }
+    .card.wide { grid-column: 1 / -1; }
     .card.main { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 18px 50px -20px rgba(79, 176, 240, 0.55); }
     .card h2 { margin: 0; font-size: 22px; letter-spacing: -0.3px; }
     .card .sub { display: block; color: var(--muted); font-size: 13px; font-weight: 500; }
@@ -164,6 +165,7 @@
     .steps { margin: 2px 0 0; padding-left: 20px; color: var(--muted); font-size: 14.5px; }
     .steps li { margin: 5px 0; }
     .steps b { color: var(--text); font-weight: 600; }
+    .steps code { overflow-wrap: anywhere; }
 
     .needs { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
     .needs li { display: flex; gap: 12px; color: var(--muted); font-size: 14.5px; }
@@ -221,20 +223,6 @@
     .launcher { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 32px; align-items: center; margin-top: 56px; }
     .launcher img { display: block; width: 100%; max-width: 576px; height: auto; border-radius: 12px; box-shadow: 0 30px 80px -30px rgba(0, 0, 0, 0.8); }
     .launcher h3.section { margin-top: 0; }
-
-    .planned { margin-top: 64px; }
-    .planned-head { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 14px; margin: 0 0 6px; }
-    .planned-head h3.section { margin: 0; }
-    .pill {
-      font-size: 12px; font-weight: 700; letter-spacing: 0.4px;
-      color: var(--warn); border: 1px solid color-mix(in srgb, var(--warn) 55%, transparent);
-      background: color-mix(in srgb, var(--warn) 12%, transparent);
-      padding: 3px 10px; border-radius: 999px;
-    }
-    .planned .section-sub { margin-top: 8px; }
-    .planned .points li { border-style: dashed; }
-    .later { color: var(--muted); font-size: 14.5px; margin: 16px 0 0; }
-    .later b { color: var(--text); }
 
     footer { margin: 56px 0 40px; padding-top: 22px; border-top: 1px solid var(--border); color: var(--muted); font-size: 14px; }
     footer nav { display: flex; flex-wrap: wrap; gap: 8px 22px; margin-bottom: 12px; }
@@ -302,30 +290,9 @@
         </div>
       </section>
 
-      <section class="planned" aria-labelledby="planned-title">
-        <div class="planned-head">
-          <h3 class="section" id="planned-title">Coming: a full mod manager</h3>
-          <span class="pill">In the works · not in the download yet</span>
-        </div>
-        <p class="section-sub">Clear Skies is growing into a mod manager for Breath of the Wild on Savage Wind, for the mods that can't go into Savage Wind itself. This is the plan; follow along on <a href="https://github.com/devall96/ClearSkies">GitHub</a>.</p>
-        <ul class="points">
-          <li><b>Your mods in one list</b>Drop a mod's <code>.zip</code>, <code>.7z</code>, <code>.rar</code> or folder on the window, tick the ones you want and put them in order.</li>
-          <li><b>Any layout</b>A Switch <code>romfs</code> folder, Atmosphère's layout, a BCML export or the bare files, with DLC files put where they belong.</li>
-          <li><b>Clear about conflicts</b>See which mods change the same files and which one wins, and which mods can't work, with the reason.</li>
-          <li><b>GameBanana built in</b>Browse, search and look at mods without leaving Clear Skies, then download and install one in a click, checked against GameBanana's MD5.</li>
-          <li><b>Preset saves</b>Install a 100% save or one from a certain point. Your own saves are backed up first, and any backup can be put back.</li>
-          <li><b>Pack merging</b>Two mods that change the same pack get merged together, instead of one replacing the other.</li>
-          <li><b>Bigger files that load</b>The game's resource size table is adjusted for you, so mods that make files bigger just work.</li>
-          <li><b>Wii U mods on Switch</b>Wii U mods and Cemu graphic packs converted to the Switch's byte order, so the game can read them.</li>
-          <li><b>Never touches the game</b>Mods are merged when you press Play, through Savage Wind's own overlay. Start the game directly and it's unmodded.</li>
-          <li><b>Updates itself</b>An Update button when there's a new Clear Skies, checked against GitHub's checksum, keeping your settings and mods.</li>
-        </ul>
-        <p class="later"><b>Later:</b> Nexus Mods, and other recomps besides Savage Wind.</p>
-      </section>
-
       <div class="notes">
         <p class="note caution"><b>No game files, ever.</b> Not in the download, the issues or the wiki. Please don't post game files, dumps, keys or an installed copy.</p>
-        <p class="note warn"><b>Early, tested on one PC</b> (AMD RX 9070 XT, HDR off). NVIDIA, Intel, HDR, Linux and Steam Deck reports are very welcome: <a href="https://github.com/devall96/ClearSkies/issues">open an issue</a>.</p>      </div>
+        <p class="note warn"><b>Early, tested on one PC</b> (AMD RX 9070 XT, HDR off). Linux passes the same automated test, but hasn't been tried in the game yet. NVIDIA, Intel, HDR, Linux and Steam Deck reports are very welcome: <a href="https://github.com/devall96/ClearSkies/issues">open an issue</a>.</p>      </div>
 
       <h3 class="section" id="download">Download Clear Skies</h3>
       <section class="cards" aria-label="Download">
@@ -348,12 +315,29 @@
           </ol>
         </article>
 
-        <article class="card">
+        <article class="card main">
+          <div class="os">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4-4 4z"/></svg>
+            <div><h2>Linux &amp; Steam Deck</h2><span class="sub">x86-64, for Savage Wind's AppImage · new, not yet tried in the game</span></div>
+          </div>
+          <a class="btn primary" id="tar-link" href="https://github.com/devall96/ClearSkies/releases/latest">
+            <span class="file">Download Clear Skies<small id="tar-name">ClearSkies-&lt;version&gt;-linux-x86_64.tar.gz</small></span>
+            <span class="size" id="tar-size"></span>
+          </a>
+          <ol class="steps">
+            <li>Unpack it anywhere: <code>tar xzf ClearSkies-*-linux-x86_64.tar.gz</code>. Keep the <b>ClearSkies-linux</b> folder's files together.</li>
+            <li>Point it at the game once, choose a look, and play: <code>./clearskies.sh --game ~/Games/Savage_Wind-…-x86_64.AppImage --preset serfrost</code></li>
+            <li>After that, <code>./clearskies.sh</code> starts it. <code>--list</code> shows the presets.</li>
+            <li><b>Steam Deck:</b> add the AppImage to Steam as a non-Steam game, and set its launch options to <code>/path/to/ClearSkies-linux/clearskies.sh %command%</code>.</li>
+          </ol>
+        </article>
+
+        <article class="card wide">
           <span class="label">Before you start</span>
           <ul class="needs">
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>A working Savage Wind.</b> Set up with your own game files and started at least once. <a href="https://github.com/Revivedx/SavageWindRecomp">Savage Wind Recomp</a> isn't included.</span></li>
             <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Precompiled shaders</b>, for the smoothest first run: <b>Precompile shaders</b> in Savage Wind Configuration.</span></li>
-            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Nothing to uninstall.</b> Delete the folder and it's gone. Start <code>savagewind.exe</code> directly any time for the original look.</span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 16.2 4.8 12l-1.4 1.4L9 19 21 7l-1.4-1.4z"/></svg><span><b>Nothing to uninstall.</b> Delete the folder and it's gone. Start Savage Wind directly any time for the original look.</span></li>
           </ul>
         </article>
       </section>
@@ -378,7 +362,7 @@
   </div>
 
   <script>
-    // Version, date, zip name and size from GitHub. The button works without this (it opens the release page).
+    // Version, date, and each download's name and size from GitHub. The buttons work without this (they open the release page).
     (function () {
       function mb(bytes) { return bytes < 1048576 ? Math.round(bytes / 1024) + " KB" : (bytes / 1048576).toFixed(1) + " MB"; }
       fetch("https://api.github.com/repos/devall96/ClearSkies/releases/latest", { headers: { Accept: "application/vnd.github+json" } })
@@ -392,6 +376,12 @@
           }
           // The same zip the launcher's updater picks: the first .zip in the release.
           var zip = (rel.assets || []).filter(function (a) { return /\.zip$/i.test(a.name); })[0];
+          var tar = (rel.assets || []).filter(function (a) { return /linux.*\.tar\.gz$/i.test(a.name); })[0];
+          if (tar) {
+            document.getElementById("tar-link").href = tar.browser_download_url;
+            document.getElementById("tar-name").textContent = tar.name;
+            document.getElementById("tar-size").textContent = mb(tar.size);
+          }
           if (zip) {
             document.getElementById("zip-link").href = zip.browser_download_url;
             document.getElementById("zip-name").textContent = zip.name;

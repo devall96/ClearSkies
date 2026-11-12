@@ -1,6 +1,8 @@
 # Changelog
 
-## Unreleased
+## 0.2.0 (2026-11-11)
+
+Linux and Steam Deck support, by [Danny Rashid](https://github.com/danny-rashd).
 
 - Linux: the layer builds as `libclearskies_layer.so` for Savage Wind's native AppImage. It uses the shaderc the
   AppImage ships, and falls back to the system's.
@@ -8,6 +10,8 @@
   options (`clearskies.sh %command%`) for the Steam Deck.
 - `build.sh` and `tests/run_tests.sh` build and test the Linux version. All 21 presets pass the layer test on
   Ubuntu 24.04 with Mesa's software Vulkan driver. It hasn't been tried in the game on Linux yet.
+- A GitHub check builds the Linux version and runs that test on every push.
+- The download page has a Linux download next to the Windows one.
 
 ## 0.1.0 (2026-11-07)
 

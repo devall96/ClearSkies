@@ -11,7 +11,7 @@
 > **Made with AI.** Every line of code in Clear Skies, every test, the icon, the banner and this page were written or made by Claude, Anthropic's AI, through Claude Code. A human, [devall96](https://github.com/devall96), came up with the idea, directs it and plays every build, but no human reviews the code line by line. [Who did what](#who-did-what) has the details. If you don't want to run code written that way, don't run this. As with anything on the internet, you run it at your own risk.
 
 > [!WARNING]
-> **Early, and tested on one PC.** Clear Skies has run in the game on one Windows PC with an AMD Radeon RX 9070 XT, using Serfrost's preset with HDR off. Every preset is tested automatically on that GPU, but NVIDIA, Intel, HDR output, Linux and Steam Deck haven't been tried yet. Clear Skies doesn't touch your saves, but it's still worth keeping a copy of any you care about.
+> **Early, and tested on one PC.** Clear Skies has run in the game on one Windows PC with an AMD Radeon RX 9070 XT, using Serfrost's preset with HDR off. Every preset is tested automatically on that GPU, and the Linux version passes the same test on Ubuntu, but NVIDIA, Intel, HDR output, Linux and Steam Deck haven't been tried in the game yet. Clear Skies doesn't touch your saves, but it's still worth keeping a copy of any you care about.
 
 > [!NOTE]
 > **Not official.** Clear Skies is a fan-made mod. It isn't made by, affiliated with or endorsed by the Savage Wind Recomp team, the Cemu team or Nintendo. Please don't report Clear Skies problems to Savage Wind or Cemu: [open an issue here](https://github.com/devall96/ClearSkies/issues) instead.
@@ -76,7 +76,7 @@ From then on, start the game with ClearSkies.exe whenever you want Clarity. To c
 Savage Wind runs natively on Linux as an AppImage, and Clear Skies has a native Linux build for it: `libclearskies_layer.so` and a launcher script, `clearskies.sh`, in place of the Windows `.dll` and `.exe`. It works the same way: the layer is switched on only for the game the script starts, and nothing is installed system-wide.
 
 1. Have a working **Savage Wind AppImage** first (`Savage_Wind-…-x86_64.AppImage`), set up with your game files and started at least once.
-2. Build Clear Skies (see [Build it yourself](#build-it-yourself)), or unpack a Linux build, and keep the `ClearSkies-linux` folder's files together.
+2. **[Download the newest Clear Skies](https://github.com/devall96/ClearSkies/releases)** for Linux (`ClearSkies-<version>-linux-x86_64.tar.gz`) and unpack it anywhere with `tar xzf ClearSkies-*-linux-x86_64.tar.gz`. Keep the `ClearSkies-linux` folder's files together. (Or [build it yourself](#build-it-yourself).)
 3. Point it at the game once, choose a look, and play:
 
 ```bash

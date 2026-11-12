@@ -4,8 +4,8 @@
 1 24 "launcher.manifest"
 
 VS_VERSION_INFO VERSIONINFO
-FILEVERSION 0,1,0,0
-PRODUCTVERSION 0,1,0,0
+FILEVERSION 0,2,0,0
+PRODUCTVERSION 0,2,0,0
 FILEOS VOS_NT_WINDOWS32
 FILETYPE VFT_APP
 BEGIN
@@ -15,8 +15,8 @@ BEGIN
     BEGIN
       VALUE "FileDescription", "Clear Skies: Cemu's Clarity presets for Savage Wind (a mod)"
       VALUE "ProductName", "Clear Skies"
-      VALUE "FileVersion", "0.1.0"
-      VALUE "ProductVersion", "0.1.0"
+      VALUE "FileVersion", "0.2.0"
+      VALUE "ProductVersion", "0.2.0"
       VALUE "LegalCopyright", "Clear Skies: MIT License. Clarity presets: Cemu graphic packs, CC0 1.0."
       VALUE "Comments", "A mod for Savage Wind. Not affiliated with the Savage Wind team, Cemu or Nintendo."
     END
