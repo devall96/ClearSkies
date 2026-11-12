@@ -31,7 +31,7 @@
 
 #define LAYER_NAME L"VK_LAYER_CLEARSKIES_savage_wind"
 #define APP_TITLE L"Clear Skies"
-#define APP_VERSION L"0.2.0"
+#define APP_VERSION L"0.2.1"
 
 static wchar_t g_dir[MAX_PATH];  // the launcher's folder (with the layer DLL, its manifest and clearskies.ini)
 static wchar_t g_ini[MAX_PATH];

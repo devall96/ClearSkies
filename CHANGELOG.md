@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.1 (2026-11-11)
+
+- **Linux: one AppImage with the Clear Skies window**, in place of 0.2.0's tarball and script. It opens the same
+  window as ClearSkies.exe: choose a look, **Browse** to the Savage Wind AppImage (or drag it onto the window), press
+  **Play**. If the Savage Wind AppImage isn't allowed to run yet, Clear Skies offers to allow it.
+- Linux settings are saved in `~/.config/ClearSkies/clearskies.ini`, with the layer's log next to it.
+- The AppImage also works from the command line (`--play`, `--preset`, `--game`, `--list`, `--no-play`) and as
+  Steam's launch options (`ClearSkies-0.2.1-x86_64.AppImage %command%`).
+- The Linux window is drawn with SDL3 and stb_truetype in Fira Sans; all three are in LICENSES.txt.
+- GitHub's check builds the AppImage on Ubuntu 22.04 and tests it on 24.04: the command line, the window, every
+  preset through the AppImage's own layer, and Play with a fake game standing in for Savage Wind.
+- Windows is unchanged apart from the version number.
+
 ## 0.2.0 (2026-11-11)
 
 Linux and Steam Deck support, by [Danny Rashid](https://github.com/danny-rashd).

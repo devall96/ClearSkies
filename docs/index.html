@@ -318,17 +318,17 @@
         <article class="card main">
           <div class="os">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 4H4c-1.11 0-2 .9-2 2v12c0 1.1.89 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.89-2-2-2zm0 14H4V8h16v10zm-2-1h-6v-2h6v2zM7.5 17l-1.41-1.41L8.67 13l-2.59-2.59L7.5 9l4 4-4 4z"/></svg>
-            <div><h2>Linux &amp; Steam Deck</h2><span class="sub">x86-64, for Savage Wind's AppImage · new, not yet tried in the game</span></div>
+            <div><h2>Linux &amp; Steam Deck</h2><span class="sub">One AppImage, x86-64, for Savage Wind's AppImage · new, not yet tried in the game</span></div>
           </div>
           <a class="btn primary" id="tar-link" href="https://github.com/devall96/ClearSkies/releases/latest">
-            <span class="file">Download Clear Skies<small id="tar-name">ClearSkies-&lt;version&gt;-linux-x86_64.tar.gz</small></span>
+            <span class="file">Download Clear Skies<small id="tar-name">ClearSkies-&lt;version&gt;-x86_64.AppImage</small></span>
             <span class="size" id="tar-size"></span>
           </a>
           <ol class="steps">
-            <li>Unpack it anywhere: <code>tar xzf ClearSkies-*-linux-x86_64.tar.gz</code>. Keep the <b>ClearSkies-linux</b> folder's files together.</li>
-            <li>Point it at the game once, choose a look, and play: <code>./clearskies.sh --game ~/Games/Savage_Wind-…-x86_64.AppImage --preset serfrost</code></li>
-            <li>After that, <code>./clearskies.sh</code> starts it. <code>--list</code> shows the presets.</li>
-            <li><b>Steam Deck:</b> add the AppImage to Steam as a non-Steam game, and set its launch options to <code>/path/to/ClearSkies-linux/clearskies.sh %command%</code>.</li>
+            <li>Allow it to run: right-click it, <b>Properties</b>, tick <b>Allow executing file as program</b>. Then open it.</li>
+            <li>Choose a look, click <b>Browse</b> to find your Savage Wind AppImage, and press <b>Play</b>.</li>
+            <li><b>Steam Deck:</b> add the Savage Wind AppImage to Steam as a non-Steam game, and set its launch options to <code>/path/to/ClearSkies-…-x86_64.AppImage %command%</code>.</li>
+            <li>For a new version, download it here again and replace the old file. Your settings stay in <code>~/.config/ClearSkies</code>.</li>
           </ol>
         </article>
 
@@ -376,7 +376,7 @@
           }
           // The same zip the launcher's updater picks: the first .zip in the release.
           var zip = (rel.assets || []).filter(function (a) { return /\.zip$/i.test(a.name); })[0];
-          var tar = (rel.assets || []).filter(function (a) { return /linux.*\.tar\.gz$/i.test(a.name); })[0];
+          var tar = (rel.assets || []).filter(function (a) { return /\.AppImage$/i.test(a.name); })[0];
           if (tar) {
             document.getElementById("tar-link").href = tar.browser_download_url;
             document.getElementById("tar-name").textContent = tar.name;
