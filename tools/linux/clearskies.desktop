@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Clear Skies
+Comment=Cemu's Clarity presets for Savage Wind
+Exec=clearskies
+Icon=clearskies
+Categories=Game;
+Terminal=false

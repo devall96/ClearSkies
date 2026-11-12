@@ -1,5 +1,8 @@
-# Clear Skies for Linux: builds the layer and runs the layer test against every preset on Mesa's software Vulkan
-# driver (lavapipe) with Ubuntu's shaderc. The built mod is kept as a download on each run.
+# Clear Skies for Linux.
+# - build-and-test: builds the layer with build.sh and runs the layer test against every preset on Mesa's software
+#   Vulkan driver (lavapipe) with Ubuntu's shaderc.
+# - appimage: builds the AppImage on Ubuntu 22.04 (glibc 2.35, like Savage Wind) with tools/appimage.sh, then tests
+#   it the way players use it (tests/appimage_test.sh). The AppImage and pictures of its window are kept as downloads.
 name: Linux
 
 on:
@@ -20,7 +23,31 @@ jobs:
         run: sh ./build.sh
       - name: Test every preset
         run: sh tests/run_tests.sh
+
+  appimage:
+    runs-on: ubuntu-24.04
+    container: ubuntu:22.04
+    steps:
+      - name: Install the build tools, SDL3's build packages, and Vulkan (lavapipe), shaderc and Xvfb for the tests
+        run: |
+          apt-get update -q
+          DEBIAN_FRONTEND=noninteractive apt-get install -y -q --no-install-recommends \
+            ca-certificates curl git file build-essential cmake ninja-build pkg-config python3 \
+            libx11-dev libxext-dev libxrandr-dev libxcursor-dev libxfixes-dev libxi-dev libxss-dev libxtst-dev \
+            libwayland-dev libxkbcommon-dev wayland-protocols libdecor-0-dev libdbus-1-dev \
+            libegl1-mesa-dev libgl1-mesa-dev libgles2-mesa-dev \
+            libvulkan1 mesa-vulkan-drivers libgl1-mesa-dri libshaderc1 xvfb xauth
+      - uses: actions/checkout@v4
+      - name: Build the AppImage
+        run: bash tools/appimage.sh
+      - name: Test the AppImage
+        run: sh tests/appimage_test.sh dist/ClearSkies-*-x86_64.AppImage
       - uses: actions/upload-artifact@v4
         with:
-          name: ClearSkies-linux-x86_64
-          path: dist/ClearSkies-linux/
+          name: ClearSkies-AppImage
+          path: dist/*.AppImage
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: window-pictures
+          path: build/appimage-test/*.png
