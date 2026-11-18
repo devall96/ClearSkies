@@ -264,3 +264,7 @@ tests/run_tests.sh squashfs-root/usr/lib
 ## License
 
 Clear Skies' own code is under the [MIT License](LICENSE). Material from others keeps its own license: Cemu's Clarity pack is CC0 1.0, Fira Sans is OFL 1.1, SDL3 is zlib and stb_truetype is public domain or MIT. [LICENSES.txt](LICENSES.txt) has the full list, including exactly what was adapted.
+
+---
+
+<p align="center"><a href="https://ko-fi.com/devall96"><img src="https://img.shields.io/badge/Support_me_on-Ko--fi-FF5E5B?logo=ko-fi&logoColor=white&style=for-the-badge" alt="Support me on Ko-fi"></a></p>
