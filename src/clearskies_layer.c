@@ -238,7 +238,10 @@ static void load_settings(void) {
 
 // ------------------------------------------------------------------ recognising BOTW's tone-map composite
 
-typedef struct { int fragment, c_clamp, c_luma, c_log2e, b32, b33, b34, v0_noperspective, v0_flat; } ShaderInfo;
+typedef struct {
+    int fragment, c_clamp, c_luma, c_log2e, b32, b33, b34, v0_noperspective, v0_flat;
+    int push, c_srgb_slope, c_srgb_knee;  // (Savage Wind's HDR tone-mapping: a push-constant block, sRGB decode)
+} ShaderInfo;
 
 static int scan_spirv(const uint32_t *w, size_t n, ShaderInfo *si) {
     memset(si, 0, sizeof *si);
@@ -260,6 +263,8 @@ static int scan_spirv(const uint32_t *w, size_t n, ShaderInfo *si) {
                 if (x[3] == 0x461c4000u) si->c_clamp = 1;       // 10000.0
                 else if (x[3] == 0x3e99096cu) si->c_luma = 1;   // 0.2989
                 else if (x[3] == 0xbfb8aa3bu) si->c_log2e = 1;  // -log2(e)
+                else if (x[3] == 0x414eb852u) si->c_srgb_slope = 1;  // 12.92
+                else if (x[3] == 0x3d25aee6u) si->c_srgb_knee = 1;   // 0.04045
             }
             break;
         case 71:  // OpDecorate: target, decoration, literals
@@ -275,6 +280,7 @@ static int scan_spirv(const uint32_t *w, size_t n, ShaderInfo *si) {
             break;
         case 59:  // OpVariable: result type, id, storage class (Input = 1)
             if (wc >= 4 && x[2] < bound && x[3] == 1) input[x[2]] = 1;
+            if (wc >= 4 && x[3] == 9) si->push = 1;  // (PushConstant)
             break;
         }
         i += wc;
@@ -285,8 +291,16 @@ static int scan_spirv(const uint32_t *w, size_t n, ShaderInfo *si) {
     return 1;
 }
 
-static int is_tonemap(const ShaderInfo *si) {
-    return si->fragment && si->c_clamp && si->c_luma && si->c_log2e && si->b32 && si->b33 && !si->b34;
+// 1: the game's own composite. 2: Savage Wind's HDR version of it (Savage Wind 0.6+, HDR on), which it builds from
+// the game's shader source: the same two textures, the same 10000 clamp and 0.2989 luma, its settings in a
+// push-constant block, and its own curve (exp() instead of the game's exp2(x * -log2(e)), and an sRGB decode). It writes
+// the same picture as the game's, so Clarity in its place draws exactly what Clarity in the game's shader draws, which
+// keeps the presets showing even when Savage Wind uses its HDR tone-mapping. 0: anything else.
+static int tonemap_kind(const ShaderInfo *si) {
+    if (!si->fragment || !si->c_clamp || !si->c_luma || !si->b32 || !si->b33 || si->b34) return 0;
+    if (si->c_log2e && !si->push) return 1;
+    if (si->push && si->c_srgb_slope && si->c_srgb_knee) return 2;
+    return 0;
 }
 
 // ------------------------------------------------------------------ compiling Clarity with the game's shaderc
@@ -458,11 +472,12 @@ static void first_instance(void) {
     exe_path(exe, sizeof exe);
     LOG("Clear Skies loaded into %s\n", exe);
     load_settings();
-    // (Savage Wind 0.6+: with HDR on, its own HDR tone-mapping would replace the shader Clarity is made from)
+    // (Savage Wind 0.6+: with HDR on, it draws with its own HDR version of the tone-mapping shader. The launchers ask
+    // it to keep the game's; either way the layer puts Clarity in whichever of the two it uses.)
     const char *hdr = getenv("SAVAGEWIND_HDR_TONEMAP");
     LOG("Savage Wind's HDR tone-mapping: %s\n", hdr && !atoi(hdr)
             ? "off for Clarity (the game's own tone-mapping is used, also with HDR on)"
-            : "left on (with HDR on in Savage Wind, Clarity won't show: start the game from Clear Skies)");
+            : "not turned off (if Savage Wind uses it, Clarity replaces it too)");
 }
 
 static VkResult VKAPI_CALL layer_CreateInstance(const VkInstanceCreateInfo *ci, const VkAllocationCallbacks *a, VkInstance *out) {
@@ -564,7 +579,8 @@ static VkResult VKAPI_CALL layer_CreateShaderModule(VkDevice dev, const VkShader
     if (g_preset < 0 || !ci || !ci->pCode) return next(dev, ci, a, out);
 
     ShaderInfo si;
-    if (!scan_spirv(ci->pCode, ci->codeSize / 4, &si) || !is_tonemap(&si)) return next(dev, ci, a, out);
+    int kind = scan_spirv(ci->pCode, ci->codeSize / 4, &si) ? tonemap_kind(&si) : 0;
+    if (!kind) return next(dev, ci, a, out);
     size_t nwords = 0;
     const uint32_t *spv = clarity_spirv(&si, &nwords);
     if (!spv) return next(dev, ci, a, out);
@@ -583,7 +599,13 @@ static VkResult VKAPI_CALL layer_CreateShaderModule(VkDevice dev, const VkShader
         LOG("the driver refused Clarity's shader (%d): using the game's own\n", r);
         return next(dev, ci, a, out);
     }
-    if (c <= 8) LOG("Clarity replaces the tone-mapping composite (shader %ld)%s\n", (long)c, c == 8 ? "; not logging further ones" : "");
+    if (c <= 8) {
+        uint32_t sum = 2166136261u;  // (FNV-1a of the program handed to the driver: the same number is the same program)
+        for (size_t i = 0; i < nwords * 4; i++) sum = (sum ^ ((const unsigned char *)spv)[i]) * 16777619u;
+        LOG("Clarity replaces %s (shader %ld, program %08x)%s\n",
+            kind == 2 ? "Savage Wind's HDR tone-mapping" : "the tone-mapping composite", (long)c, sum,
+            c == 8 ? "; not logging further ones" : "");
+    }
     return r;
 }
 

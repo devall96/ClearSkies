@@ -46,6 +46,34 @@ static const char k_tonemap[] =  // shaped like Savage Wind's translation of BOT
     "  c0 = vec4(1.0 - exp2(c * uintBitsToFloat(0xbfb8aa3bu)), l);\n"
     "}\n";
 
+static const char k_hdr[] =  // shaped like Savage Wind 0.6's HDR version of the composite (hdr.c), made from the same source
+    "#version 460\n"
+    "layout(set = 1, binding = 32) uniform sampler2D t0;\n"
+    "layout(set = 1, binding = 33) uniform sampler2D t1;\n"
+    "layout(location = 0) in vec4 v0;\n"
+    "layout(location = 0) out vec4 c0;\n"
+    "layout(push_constant) uniform VkHdrParams { vec4 p[5]; } sw_hdr;\n"
+    "float psy_srgb_decode(float x) { return x <= 0.04045 ? x / 12.92 : pow((x + 0.055) / 1.055, 2.4); }\n"
+    "void main() {\n"
+    "  vec3 x = min(texture(t0, v0.xy).rgb, vec3(10000.0)) + min(texture(t1, v0.xy).rgb, vec3(10000.0)) * sw_hdr.p[1].z;\n"
+    "  float l = max(x.r * 0.2989 + x.g * 0.5866 + x.b * 0.1144, 0.0);\n"
+    "  vec3 c = vec3(1.0) - exp(-x);\n"
+    "  if (sw_hdr.p[4].x > 0.5) c *= psy_srgb_decode(l);\n"
+    "  c0 = vec4(c * sw_hdr.p[0].x, 1.0);\n"
+    "}\n";
+
+static const char k_push[] =  // a shader with settings in push constants and the same two textures, but not the composite
+    "#version 460\n"
+    "layout(set = 1, binding = 32) uniform sampler2D t0;\n"
+    "layout(set = 1, binding = 33) uniform sampler2D t1;\n"
+    "layout(location = 0) in vec4 v0;\n"
+    "layout(location = 0) out vec4 c0;\n"
+    "layout(push_constant) uniform P { vec4 p; } pc;\n"
+    "void main() {\n"
+    "  vec3 x = min(texture(t0, v0.xy).rgb, vec3(10000.0)) + texture(t1, v0.xy).rgb * pc.p.x;\n"
+    "  c0 = vec4(x * 0.2989, 1.0);\n"
+    "}\n";
+
 static const char k_other[] =  // any other fragment shader (three textures: not the composite)
     "#version 460\n"
     "layout(set = 1, binding = 32) uniform sampler2D t0;\n"
@@ -103,9 +131,9 @@ int main(int argc, char **argv) {
     }
 #endif
     if (!g_sc) { printf("FAIL: can't load %s\n", p); return 1; }
-    size_t nt, no;
-    uint32_t *tonemap = spirv(k_tonemap, &nt), *other = spirv(k_other, &no);
-    if (!tonemap || !other) return 1;
+    size_t nt, no, nh, np;
+    uint32_t *tonemap = spirv(k_tonemap, &nt), *other = spirv(k_other, &no), *hdr = spirv(k_hdr, &nh), *push = spirv(k_push, &np);
+    if (!tonemap || !other || !hdr || !push) return 1;
 
     HMODULE vk = LoadLibraryA(VULKAN_FILE);
     if (!vk) { printf("FAIL: no Vulkan loader (" VULKAN_FILE ")\n"); return 1; }
@@ -135,17 +163,21 @@ int main(int argc, char **argv) {
     typedef void (VKAPI_PTR *PFN_dsm)(VkDevice, VkShaderModule, const void *);
     PFN_dsm dsm = (PFN_dsm)(void *)vkGetDeviceProcAddr(dev, "vkDestroyShaderModule");
     VkShaderModuleCreateInfo mi = {VK_STRUCTURE_TYPE_SHADER_MODULE_CREATE_INFO, NULL, 0, nt, tonemap};
-    VkShaderModule m = 0, m2 = 0;
+    // (the order the run_tests scripts expect in the log: the composite, then Savage Wind's HDR version)
+    const uint32_t *code[4] = {tonemap, hdr, other, push};
+    const size_t size[4] = {nt, nh, no, np};
+    static const char *const what[4] = {"tone-map", "HDR tone-map", "other", "push-constant"};
     int fails = 0;
-    if ((r = csm(dev, &mi, NULL, &m)) || !m) { printf("FAIL: tone-map module %d\n", r); fails++; }
-    mi.codeSize = no, mi.pCode = other;
-    if ((r = csm(dev, &mi, NULL, &m2)) || !m2) { printf("FAIL: other module %d\n", r); fails++; }
-    if (m) dsm(dev, m, NULL);
-    if (m2) dsm(dev, m2, NULL);
+    for (int i = 0; i < 4; i++) {
+        VkShaderModule m = 0;
+        mi.codeSize = size[i], mi.pCode = code[i];
+        if ((r = csm(dev, &mi, NULL, &m)) || !m) { printf("FAIL: %s module %d\n", what[i], r); fails++; }
+        if (m) dsm(dev, m, NULL);
+    }
     PFN_vkDestroyDevice dd = (PFN_vkDestroyDevice)(void *)vkGetDeviceProcAddr(dev, "vkDestroyDevice");
     dd(dev, NULL);
     GET(PFN_vkDestroyInstance, vkDestroyInstance);
     vkDestroyInstance(inst, NULL);
-    if (!fails) printf("ok: both shader modules created\n");
+    if (!fails) printf("ok: all four shader modules created\n");
     return fails ? 1 : 0;
 }

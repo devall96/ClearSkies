@@ -22,7 +22,11 @@ foreach ($p in $presets) {
     $log = Get-Content (Join-Path $work 'clearskies.log') -Raw
     $loaded = $log -match 'loaded into'
     $replaced = ([regex]::Matches($log, 'replaces the tone-mapping composite')).Count
-    $ok = $LASTEXITCODE -eq 0 -and $loaded -and ($(if ($p -eq 'off') { $replaced -eq 0 } else { $replaced -eq 1 -and $log -match 'compiled' }))
+    $hdr = ([regex]::Matches($log, "replaces Savage Wind's HDR tone-mapping")).Count
+    # (Clarity in Savage Wind's HDR version is the very program it puts in the game's composite: the same image)
+    $programs = @([regex]::Matches($log, 'program ([0-9a-f]{8})') | ForEach-Object { $_.Groups[1].Value } | Select-Object -Unique)
+    $ok = $LASTEXITCODE -eq 0 -and $loaded -and ($(if ($p -eq 'off') { $replaced -eq 0 -and $hdr -eq 0 } else {
+        $replaced -eq 1 -and $hdr -eq 1 -and $programs.Count -eq 1 -and $log -match 'compiled' }))
     if (-not $ok) { $failed++ }
     '{0,-20} {1}' -f $p, $(if ($ok) { 'ok' } else { "FAIL`n$out`n$log" })
 }

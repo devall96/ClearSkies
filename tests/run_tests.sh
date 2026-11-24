@@ -22,10 +22,13 @@ for p in $presets; do
     if out=$("$TEST" "$@" 2>&1); then code=0; else code=$?; fi
     log=$(cat "$WORK/clearskies.log" 2>/dev/null || true)
     replaced=$(printf '%s\n' "$log" | grep -c 'replaces the tone-mapping composite' || true)
+    hdr=$(printf '%s\n' "$log" | grep -c "replaces Savage Wind's HDR tone-mapping" || true)
+    # (Clarity in Savage Wind's HDR version is the very program it puts in the game's composite: the same image)
+    programs=$(printf '%s\n' "$log" | grep -o 'program [0-9a-f]\{8\}' | sort -u | wc -l)
     ok=0
     if [ "$code" = 0 ] && printf '%s' "$log" | grep -q 'loaded into'; then
-        if [ "$p" = off ]; then [ "$replaced" = 0 ] && ok=1
-        else [ "$replaced" = 1 ] && printf '%s' "$log" | grep -q 'compiled' && ok=1; fi
+        if [ "$p" = off ]; then [ "$replaced" = 0 ] && [ "$hdr" = 0 ] && ok=1
+        else [ "$replaced" = 1 ] && [ "$hdr" = 1 ] && [ "$programs" = 1 ] && printf '%s' "$log" | grep -q 'compiled' && ok=1; fi
     fi
     if [ "$ok" = 1 ]; then printf '%-20s ok\n' "$p"
     else failed=$((failed + 1)); printf '%-20s FAIL\n%s\n%s\n' "$p" "$out" "$log"; fi
