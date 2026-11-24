@@ -95,7 +95,7 @@ From then on, open Clear Skies whenever you want Clarity. Your choices are saved
 **Steam and Steam Deck:** add the **Savage Wind** AppImage to Steam as a non-Steam game (native, without Proton), then set its launch options to:
 
 ```
-/home/deck/Applications/ClearSkies-0.2.2-x86_64.AppImage %command%
+/home/deck/Applications/ClearSkies-0.2.3-x86_64.AppImage %command%
 ```
 
 Use the path where you keep Clear Skies. The game then starts with your saved preset. To change it, open Clear Skies in Desktop Mode, pick another look and close the window (or run it with `--preset <name> --no-play`).
@@ -149,6 +149,10 @@ Breath of the Wild finishes every frame with one shader. It adds the bloom to th
 1. **ClearSkies.exe** starts `savagewind.exe` with the Vulkan loader told to load the Clear Skies layer, for that one process only.
 2. **clearskies_layer.dll** sits between the game and the graphics driver and looks at every shader the game creates. It recognises the tone-mapping shader by what's inside it: its two textures, and the constants BotW's tone map uses (the 10000 clamp, the 0.2989 luma weight and −log₂ e).
 3. When it finds it, the layer builds Clarity with your preset's settings, using the shader compiler that ships with Savage Wind, and hands that to the driver instead. Every other shader passes through untouched.
+4. **With HDR on (Savage Wind 0.6 and newer)**, Savage Wind draws with its own HDR version of that shader. The layer recognises that one too and puts the same Clarity program in it, so the picture is the same either way. The launcher also asks Savage Wind to keep the game's own shader, so either alone is enough.
+
+> [!IMPORTANT]
+> **With a preset on, Savage Wind's custom HDR tone-mapping isn't used.** Its extra-bright HDR highlights and its HDR picture settings (tone mapper, highlights, shadows, contrast and the rest) don't apply while Clarity is on, because Clarity *is* the tone-mapping. Savage Wind still shows Clarity's picture in HDR, at its game brightness. For Savage Wind's own HDR look and highlights, choose **Off**.
 
 The Clarity code itself comes from Cemu's pack: `tools/gen_presets.py` reads the presets and the shader's functions straight out of Cemu's files (kept unchanged in `third_party/cemu`), so nothing is retyped by hand. The only changes are what Savage Wind needs: the shader's inputs, the pixel size, and clamps that match the game's own shader ([LICENSES.txt](LICENSES.txt) lists them).
 
@@ -161,15 +165,17 @@ Clear Skies loaded into C:\...\savagewind.exe
 preset: serfrost (Cemu's "Serfrost's Preset (Recommended)")
 watching shaders on a new Vulkan device
 Clarity compiled (32140 bytes of SPIR-V)
-Clarity replaces the tone-mapping composite (shader 1)
+Clarity replaces the tone-mapping composite (shader 1, program 2dd90328)
 ```
+
+With HDR on in Savage Wind 0.6 you may also see `Clarity replaces Savage Wind's HDR tone-mapping` with the same program number: the same Clarity in Savage Wind's HDR version of the shader.
 
 | What you see | What it means |
 | --- | --- |
 | Savage Wind opens its setup screen | That copy of Savage Wind isn't set up yet. Finish its setup, then use Clear Skies. |
 | No log, or no `loaded into` line | The layer didn't load. Start the game from ClearSkies.exe and keep all of Clear Skies' files together. |
 | `failed to compile` | A value in `clearskies.ini` can't be used. The message says which. Remove that line. |
-| Loaded, but never `replaces the tone-mapping composite` | Your Savage Wind builds that shader differently. Please [report it](https://github.com/devall96/ClearSkies/issues) with the log. |
+| Loaded, but never `Clarity replaces` | Your Savage Wind builds that shader differently. Please [report it](https://github.com/devall96/ClearSkies/issues) with the log. |
 | Stutters the first time you see places | That's Savage Wind compiling shaders. Run **Precompile shaders** in Savage Wind Configuration. |
 
 ## Help test it

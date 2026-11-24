@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.2.3 (2026-11-24)
+
+- **Presets no longer depend on Savage Wind honouring a test switch.** With HDR on, Savage Wind 0.6 draws with its own
+  HDR version of the game's tone-mapping shader. 0.2.2 asked Savage Wind not to (`SAVAGEWIND_HDR_TONEMAP=0`), a test
+  switch it could drop in any update. Now the layer also recognises Savage Wind's HDR version and puts the very same
+  Clarity program in it, so the picture is identical either way. The launchers still set the switch, so either one alone
+  is enough.
+- **With a preset on, Savage Wind's custom HDR tone-mapping isn't used:** its extra-bright HDR highlights and its HDR
+  picture settings don't apply, because Clarity is the tone-mapping. Savage Wind still shows Clarity in HDR, at its game
+  brightness. Choose **Off** for Savage Wind's own HDR look.
+- `clearskies.log` names each replacement with a checksum of the program handed to the driver: the same number means
+  the same Clarity.
+- The layer test adds a stand-in for Savage Wind's HDR shader and a look-alike that must be left alone, and checks
+  that both replacements are one identical program (Windows, and on Linux in GitHub's check).
+- Tested on Savage Wind 0.6.0-alpha.6 on Windows (AMD Radeon RX 9070 XT) with HDR on, without the switch (Savage Wind's
+  HDR tone-mapping ran and was replaced with the same program as the game's), with HDR off, and on Savage Wind 0.5.3.
+
 ## 0.2.2 (2026-11-24)
 
 - **Fixed: presets didn't show with HDR on in Savage Wind 0.6** (issues #1 and #2). With HDR on, Savage Wind 0.6

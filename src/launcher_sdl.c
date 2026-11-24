@@ -52,7 +52,7 @@
 
 #define LAYER_NAME "VK_LAYER_CLEARSKIES_savage_wind"
 #define APP_TITLE "Clear Skies"
-#define APP_VERSION "0.2.2"
+#define APP_VERSION "0.2.3"
 #ifdef _WIN32
 #define LAYER_FILE "clearskies_layer.dll"
 #define GAME_WORD "savagewind.exe"
