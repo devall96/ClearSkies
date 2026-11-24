@@ -52,7 +52,7 @@
 
 #define LAYER_NAME "VK_LAYER_CLEARSKIES_savage_wind"
 #define APP_TITLE "Clear Skies"
-#define APP_VERSION "0.2.1"
+#define APP_VERSION "0.2.2"
 #ifdef _WIN32
 #define LAYER_FILE "clearskies_layer.dll"
 #define GAME_WORD "savagewind.exe"
@@ -286,6 +286,10 @@ static int layer_env(void) {
     prepend_env("VK_LAYER_PATH", dir, sep);      // (older loaders)
     prepend_env("VK_INSTANCE_LAYERS", LAYER_NAME, sep);
     SDL_setenv_unsafe("CLEARSKIES_INI", g_ini, 1);
+    // Savage Wind 0.6 with HDR on runs its own HDR tone-mapping shader instead of the game's, which the layer turns
+    // into Clarity: with a preset on, the game keeps its own (issues #1, #2); "off" leaves Savage Wind's HDR alone.
+    if (SDL_strcasecmp(g_preset, "off") != 0) SDL_setenv_unsafe("SAVAGEWIND_HDR_TONEMAP", "0", 1);
+    else SDL_unsetenv_unsafe("SAVAGEWIND_HDR_TONEMAP");
     // Clear Skies' own AppImage variables would otherwise reach the game (Savage Wind's AppImage sets its own)
     SDL_unsetenv_unsafe("APPDIR");
     SDL_unsetenv_unsafe("APPIMAGE");

@@ -31,7 +31,7 @@
 
 #define LAYER_NAME L"VK_LAYER_CLEARSKIES_savage_wind"
 #define APP_TITLE L"Clear Skies"
-#define APP_VERSION L"0.2.1"
+#define APP_VERSION L"0.2.2"
 
 static wchar_t g_dir[MAX_PATH];  // the launcher's folder (with the layer DLL, its manifest and clearskies.ini)
 static wchar_t g_ini[MAX_PATH];
@@ -129,6 +129,11 @@ static int start_game(HWND owner) {
     prepend_env(L"VK_LAYER_PATH", dir, L";");      // (older loaders)
     prepend_env(L"VK_INSTANCE_LAYERS", LAYER_NAME, L";");
     SetEnvironmentVariableW(L"CLEARSKIES_INI", g_ini);
+    // Savage Wind 0.6 with HDR on replaces the game's tone-mapping shader with its own HDR one at draw time, so the
+    // shader the layer turned into Clarity never ran (issues #1, #2). With a Clarity preset on, the game keeps its own
+    // tone-mapping program (Clarity) and Savage Wind still presents it in HDR, at its scene brightness; "off" leaves
+    // Savage Wind's HDR tone-mapping alone.
+    SetEnvironmentVariableW(L"SAVAGEWIND_HDR_TONEMAP", _wcsicmp(g_preset, L"off") ? L"0" : NULL);
 
     wchar_t cmd[8192];
     swprintf(cmd, sizeof cmd / sizeof cmd[0], L"\"%ls\"%ls%ls", g_game, g_game_args[0] ? L" " : L"", g_game_args);

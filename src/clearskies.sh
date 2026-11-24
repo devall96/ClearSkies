@@ -144,6 +144,9 @@ prepend VK_ADD_LAYER_PATH "$HERE"  # (Vulkan loader 1.3.234 and newer)
 prepend VK_LAYER_PATH "$HERE"      # (older loaders)
 prepend VK_INSTANCE_LAYERS "$LAYER_NAME"
 export CLEARSKIES_INI="$INI"
+# Savage Wind 0.6 with HDR on runs its own HDR tone-mapping shader instead of the game's, which the layer turns into
+# Clarity: with a preset on, the game keeps its own (issues #1, #2); "off" leaves Savage Wind's HDR alone.
+if [ "$(ini_get clarity preset)" != off ]; then export SAVAGEWIND_HDR_TONEMAP=0; else unset SAVAGEWIND_HDR_TONEMAP; fi
 
 say "starting with preset $(ini_get clarity preset); the log is $HERE/clearskies.log"
 if [ "$wrapped" = 1 ]; then exec "$@"; fi

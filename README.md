@@ -11,7 +11,7 @@
 > **Made with AI.** Every line of code in Clear Skies, every test, the icon, the banner and this page were written or made by Claude, Anthropic's AI, through Claude Code. A human, [devall96](https://github.com/devall96), came up with the idea, directs it and plays every build, but no human reviews the code line by line. [Who did what](#who-did-what) has the details. If you don't want to run code written that way, don't run this. As with anything on the internet, you run it at your own risk.
 
 > [!WARNING]
-> **Early, and tested on one PC.** Clear Skies has run in the game on one Windows PC with an AMD Radeon RX 9070 XT, using Serfrost's preset with HDR off. Every preset is tested automatically on that GPU. The Linux AppImage has been tested on Ubuntu 26.04 LTS and works fine in short testing. NVIDIA, Intel, HDR output, other Linux distributions and the Steam Deck haven't been tried yet. Clear Skies doesn't touch your saves, but it's still worth keeping a copy of any you care about.
+> **Early, and tested on one PC.** Clear Skies has run in the game on one Windows PC with an AMD Radeon RX 9070 XT, using Serfrost's preset with HDR off and on (Savage Wind 0.6.0). Every preset is tested automatically on that GPU. The Linux AppImage has been tested on Ubuntu 26.04 LTS and works fine in short testing. NVIDIA, Intel, other Linux distributions and the Steam Deck haven't been tried yet. Clear Skies doesn't touch your saves, but it's still worth keeping a copy of any you care about.
 
 > [!NOTE]
 > **Not official.** Clear Skies is a fan-made mod. It isn't made by, affiliated with or endorsed by the Savage Wind Recomp team, the Cemu team or Nintendo. Please don't report Clear Skies problems to Savage Wind or Cemu: [open an issue here](https://github.com/devall96/ClearSkies/issues) instead.
@@ -95,7 +95,7 @@ From then on, open Clear Skies whenever you want Clarity. Your choices are saved
 **Steam and Steam Deck:** add the **Savage Wind** AppImage to Steam as a non-Steam game (native, without Proton), then set its launch options to:
 
 ```
-/home/deck/Applications/ClearSkies-0.2.1-x86_64.AppImage %command%
+/home/deck/Applications/ClearSkies-0.2.2-x86_64.AppImage %command%
 ```
 
 Use the path where you keep Clear Skies. The game then starts with your saved preset. To change it, open Clear Skies in Desktop Mode, pick another look and close the window (or run it with `--preset <name> --no-play`).

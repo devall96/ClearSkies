@@ -458,6 +458,11 @@ static void first_instance(void) {
     exe_path(exe, sizeof exe);
     LOG("Clear Skies loaded into %s\n", exe);
     load_settings();
+    // (Savage Wind 0.6+: with HDR on, its own HDR tone-mapping would replace the shader Clarity is made from)
+    const char *hdr = getenv("SAVAGEWIND_HDR_TONEMAP");
+    LOG("Savage Wind's HDR tone-mapping: %s\n", hdr && !atoi(hdr)
+            ? "off for Clarity (the game's own tone-mapping is used, also with HDR on)"
+            : "left on (with HDR on in Savage Wind, Clarity won't show: start the game from Clear Skies)");
 }
 
 static VkResult VKAPI_CALL layer_CreateInstance(const VkInstanceCreateInfo *ci, const VkAllocationCallbacks *a, VkInstance *out) {

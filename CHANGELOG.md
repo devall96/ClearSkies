@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.2.2 (2026-11-24)
+
+- **Fixed: presets didn't show with HDR on in Savage Wind 0.6** (issues #1 and #2). With HDR on, Savage Wind 0.6
+  draws the picture with its own HDR tone-mapping shader instead of the game's. Clear Skies turns the game's shader
+  into Clarity, so the look was loaded (the log said so) but never drawn. Now, with a preset chosen, Clear Skies asks
+  Savage Wind to keep the game's own tone-mapping (`SAVAGEWIND_HDR_TONEMAP=0`), and Savage Wind still shows it in HDR.
+  With **Off**, Savage Wind's HDR tone-mapping is left alone.
+- With a preset and HDR on, the picture is Clarity's at Savage Wind's game brightness, without Savage Wind's extended
+  HDR highlights. For those, choose **Off**.
+- `clearskies.log` now says whether Savage Wind's HDR tone-mapping was turned off for Clarity.
+- The same fix is in the Windows launcher, the Linux AppImage and `clearskies.sh`.
+- Tested on Savage Wind 0.6.0-alpha.6 on Windows (AMD Radeon RX 9070 XT) with HDR on and off.
+
 ## 0.2.1 (2026-11-11)
 
 - **Linux: one AppImage with the Clear Skies window**, in place of 0.2.0's tarball and script. It opens the same
